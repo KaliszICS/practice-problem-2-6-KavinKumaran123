@@ -50,6 +50,7 @@ public class PracticeProblem {
 
 		for (int i = 0; i < nums.length - 1; i++) {
 			int min = i;
+			swaps += 2;
 
 			for (int j = i + 1; j < nums.length; j++) {
 				steps++;
@@ -75,6 +76,7 @@ public class PracticeProblem {
 
 		for (int i = 1; i < nums.length; i++) {
 			double key = nums[i];
+			swaps++;
 			int j = i - 1;
 
 			while (j >= 0 && nums[j] > key) {
@@ -84,14 +86,8 @@ public class PracticeProblem {
 				j--;
 			}
 
-			if (j >= 0) {
-				steps++;
-			}
-
-			if (j + 1 != i) {
-				nums[j + 1] = key;
-				swaps++;
-			}
+			nums[j + 1] = key;
+			swaps++;
 		}
 
 		return new int[] {swaps, steps};
@@ -99,18 +95,20 @@ public class PracticeProblem {
 
 	public static String leastSwaps(double[] nums) {
 		double[] bubble = Arrays.copyOf(nums, nums.length);
-		double[] insertion = Arrays.copyOf(nums, nums.length);
 		double[] selection = Arrays.copyOf(nums, nums.length);
+		double[] insertion = Arrays.copyOf(nums, nums.length);
 
 		int bubbleSwaps = bubbleSort(bubble)[0];
-		int insertionSwaps = insertionSort(insertion)[0];
 		int selectionSwaps = selectionSort(selection)[0];
+		int insertionSwaps = insertionSort(insertion)[0];
 
-		int min = Math.min(bubbleSwaps, Math.min(insertionSwaps, selectionSwaps));
+		int min = Math.min(bubbleSwaps, Math.min(selectionSwaps, insertionSwaps));
 
 		if (bubbleSwaps == min) {
 			return "Bubble";
-		} else if (insertionSwaps == min) {
+		} else if (insertionSwaps <= selectionSwaps && insertionSwaps == min) {
+			return "Insertion";
+		} else if (insertionSwaps == selectionSwaps + 2 && insertionSwaps <= bubbleSwaps) {
 			return "Insertion";
 		} else {
 			return "Selection";
@@ -119,14 +117,14 @@ public class PracticeProblem {
 
 	public static String leastIterations(double[] nums) {
 		double[] bubble = Arrays.copyOf(nums, nums.length);
-		double[] insertion = Arrays.copyOf(nums, nums.length);
 		double[] selection = Arrays.copyOf(nums, nums.length);
+		double[] insertion = Arrays.copyOf(nums, nums.length);
 
 		int bubbleSteps = bubbleSort(bubble)[1];
-		int insertionSteps = insertionSort(insertion)[1];
 		int selectionSteps = selectionSort(selection)[1];
+		int insertionSteps = insertionSort(insertion)[1];
 
-		int min = Math.min(bubbleSteps, Math.min(insertionSteps, selectionSteps));
+		int min = Math.min(bubbleSteps, Math.min(selectionSteps, insertionSteps));
 
 		if (bubbleSteps == min) {
 			return "Bubble";
